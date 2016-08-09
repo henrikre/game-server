@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <canvas id="ctx" width="500" height="500"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
+  <script>
+    var socket = io();
+    var ctx = document.getElementById('ctx').getContext('2d');
+    ctx.font = '32px Arial';
+
+    socket.on('newPositions', function(data) {
+      ctx.clearRect(0, 0, 500, 500);
+      for (var i = 0; i < data.player.length; i++) {
+        ctx.fillText(data.player[i].onScreen, data.player[i].x, data.player[i].y);
+      }
+      for (var i = 0; i < data.bullet.length; i++) {
+        ctx.fillText(data.bullet[i].x - 5, data.bullet[i].y - 5, 10, 10);
+      }
+    });
+
+    var movements = {
+      up: false,
+      right: false,
+      down: false,
+      left: false,
+      up: false
+    };
+
+    document.onkeydown = function(e) {
+      var key = e.keyCode;
+
+      if (key === 39) movements.right = true;
+      if (key === 40) movements.down = true;
+      if (key === 37) movements.left = true;
+      if (key === 38) movements.up = true;
+
+      socket.emit('keyPress', movements);
+    }
+
+    document.onkeyup = function(e) {
+      var key = e.keyCode;
+
+      if (key === 39) movements.right = false;
+      if (key === 40) movements.down = false;
+      if (key === 37) movements.left = false;
+      if (key === 38) movements.up = false;
+
+      socket.emit('keyPress', movements);
+    }
+  </script>
+</body>
+</html>
