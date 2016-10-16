@@ -15,6 +15,18 @@ class Entity {
   update() {
     this.updatePosition();
   }
+
+  xWithinBounds() {
+    return (this.x >= 0 && this.x <= 500);
+  }
+
+  yWithinBounds() {
+    return (this.y >= 0 && this.y <= 500);
+  }
+
+  isWithinBounds() {
+    return (this.xWithinBounds() && this.yWithinBounds());
+  }
 }
 
 module.exports = Entity;

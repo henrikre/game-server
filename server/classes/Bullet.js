@@ -1,8 +1,11 @@
 const Entity = require('./Entity');
 
 class Bullet extends Entity {
-  constructor(angle) {
+  constructor(x, y, angle) {
+    console.log('New bullet created!');
     super();
+    this.x = x;
+    this.y = y;
     this.id = Math.random();
     this.speedX = Math.cos(angle/180*Math.PI)*10;
     this.speedY = Math.sin(angle/180*Math.PI)*10;
@@ -13,8 +16,10 @@ class Bullet extends Entity {
   }
 
   update() {
-    if (this.timer++ > 100) {
-      this.toRemove = true;
+    console.log(super.isWithinBounds());
+    if (this.timer++ > 100 || !super.isWithinBounds()) {
+      // this.toRemove = true;
+      delete Bullet.list[this.id];
     }
     super.update();
   }
@@ -28,7 +33,7 @@ Bullet.update = () => {
   for (var i in Bullet.list) {
     var bullet = Bullet.list[i];
     bullet.update();
-
+    console.log(bullet)
     movementData.push({
       x: bullet.x,
       y: bullet.y

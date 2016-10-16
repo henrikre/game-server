@@ -5,7 +5,7 @@
   <title>Document</title>
 </head>
 <body>
-  <canvas id="ctx" width="500" height="500"></canvas>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.6.2/phaser.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.min.js"></script>
   <script>
     var socket = io();
@@ -18,7 +18,7 @@
         ctx.fillText(data.player[i].onScreen, data.player[i].x, data.player[i].y);
       }
       for (var i = 0; i < data.bullet.length; i++) {
-        ctx.fillText(data.bullet[i].x - 5, data.bullet[i].y - 5, 10, 10);
+        ctx.fillText('.', data.bullet[i].x - 5, data.bullet[i].y - 5);
       }
     });
 
@@ -39,6 +39,10 @@
       if (key === 38) movements.up = true;
 
       socket.emit('keyPress', movements);
+
+      if (key === 32) {
+        socket.emit('shoot', true);
+      }
     }
 
     document.onkeyup = function(e) {
@@ -50,6 +54,10 @@
       if (key === 38) movements.up = false;
 
       socket.emit('keyPress', movements);
+
+      if (key === 32) {
+        socket.emit('shoot', false);
+      }
     }
   </script>
 </body>
